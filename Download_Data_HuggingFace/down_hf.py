@@ -8,7 +8,7 @@ segmentation_dataset = load_dataset("rkumari/corrosion_segment", split="validati
 
 
 # Access images and masks (assuming the dataset structure includes "image" and "labe" keys)
-# These key might be different for each dataset 
+# These keys might be different for each dataset 
 
 # Define output directories
 output_image_dir = r"C:\Users\Abbas Khan\Downloads\Data_Downloaded\rkumaricorrosion_segment\val\imgs"
@@ -20,7 +20,6 @@ for i, sample in enumerate(segmentation_dataset):
     image = sample["image"]  # Key for the image
     mask = sample["label"]   # Key for the mask
 
-    # Convert to PIL Image if necessary
     if not isinstance(image, Image.Image):
         image = Image.fromarray(image)
 
