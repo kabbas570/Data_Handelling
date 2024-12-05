@@ -233,32 +233,34 @@ def generate_coco_masks_multiclass(labels_path, save_dir, filter_files=None, cla
             
             ID  = pathlib.Path(img['file_name']).stem
             print(ID)
-                        
+            
+            #if ID == '1_jpg.rf.404acda059b5089d795f5c9b7a4f37df':
+            
                 # get all annotations for this image
             anns_ids = coco.getAnnIds(imgIds=img['id'], catIds=cat_ids, iscrowd=None)
             anns = coco.loadAnns(anns_ids)
-    
-                # create a mask using label encoding (each pixel is a value representing the class it belongs to)
+
+            # create a mask using label encoding (each pixel is a value representing the class it belongs to)
             mask = np.zeros((img['height'], img['width'], 3), dtype=np.uint8)
             for a in anns:
                 m = coco.annToMask(a)
-    
+
                 if class_groupings:
-                       group_index = next((i for i, tpl in enumerate(class_groupings) if a['category_id'] in tpl), None)
-                       color = np.array(class_colors[group_index].rgb)# * 255
+                    group_index = next((i for i, tpl in enumerate(class_groupings) if a['category_id'] in tpl), None)
+                    color = np.array(class_colors[group_index].rgb)# * 255
                 else:
                     color = np.array(class_colors[a['category_id']])# * 255
-    
-                    mask[m > 0] = color
-    
-                filename = Path(img['file_name']).stem + '.png'
-                Image.fromarray(mask).save(save_dir.joinpath(filename))
+
+                mask[m > 0] = color
+
+            filename = Path(img['file_name']).stem + '.png'
+            Image.fromarray(mask).save(save_dir.joinpath(filename))
         except Exception as e:
             print(f'Failed to create mask for {img["file_name"]}: {e}')
 
 
 
-path = r"C:\Users\Abbas Khan\Downloads\Corrosion Instance Segmentation.v16i.coco-segmentation\train\_annotations.coco.json"
-save_dir = r'C:\Users\Abbas Khan\Downloads\Corrosion Instance Segmentation.v16i.coco-segmentation\train\gts'
+path = r"C:\Users\Abbas Khan\Downloads\Download_Thursday\Nut and bolt corrosion 2.v1i.coco-segmentation\train\_annotations.coco.json"
+save_dir = r'C:\Users\Abbas Khan\Downloads\Download_Thursday\Nut and bolt corrosion 2.v1i.coco-segmentation\train\gts1'
 
 _=generate_coco_masks_multiclass(path,save_dir)
