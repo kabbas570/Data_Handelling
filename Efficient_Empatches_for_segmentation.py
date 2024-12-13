@@ -5,7 +5,7 @@ import shutil
 import os
 import cv2
 
-class EMPatches(object):
+class EMPatches_Effi_Seg_Inference(object):
     
     def __init__(self):
         self.temp_dir = None
@@ -123,11 +123,11 @@ class EMPatches(object):
 
         return self.temp_dir, indices , (height,width,depth)
 
-emp = EMPatches()# Directories and input image
+emp = EMPatches_Effi_Seg_Inference()# Directories and input image
 
-output_path = r"C:\My_Data\Nay_Data\LA_Data\ANOTHER\reconstructed_image.png"
-image_path = r"C:\Users\Abbas Khan\Downloads\Data_Downloaded\c9_rfyuf_kaggle_rust-segmentation\train\imgs\GEN_105_png.rf.6328a2dcccd169e4ea7cbc6aa3781be4.jpg"
-temp_dir = r"C:\My_Data\Nay_Data\LA_Data\ANOTHER"
+output_path = "path to save segmentaiton mask" + "reconstructed_seg_mask.png"
+image_path = "path to the input RGB image"
+temp_dir = "Optional to save temporray patches"
 
 
 image = cv2.imread(image_path)
@@ -143,7 +143,6 @@ class Seg_Model(nn.Module):
         return cv2.cvtColor(x, cv2.COLOR_RGB2GRAY)
 model = Seg_Model()  
 
-
 reconstructed_seg_mask= np.zeros((org_shape), dtype=np.uint8)
 # Iterate through patch files
 for i, patch_file in enumerate(sorted(os.listdir(patches_path))):
@@ -156,5 +155,5 @@ for i, patch_file in enumerate(sorted(os.listdir(patches_path))):
     del patch,y
 
 cv2.imwrite(output_path, reconstructed_seg_mask)
-print(f"Reconstructed image saved to: {output_path}")
-_ = emp.cleanup()
+print(f"Reconstructed segmentaiton  saved to: {output_path}")
+_ = emp.cleanup()   ## to delete the patches from memory 
